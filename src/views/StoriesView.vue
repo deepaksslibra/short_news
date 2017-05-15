@@ -1,87 +1,56 @@
 <template>
   <div class="stories-view" append="tree">
-    <app-header></app-header>
-    <list class="story-list" @loadmore="loadMoreStories" loadmoreoffset="50">
-      <cell class="story-cell" v-for="story in stories" :key="story.id" append="tree">
-        <story :story="story"></story>
-      </cell>
-    </list>
-    <div class="loading" v-if="loading">
-      <text class="loading-text">loading ...</text>
+    <div class="header">
+        <div class="search">
+            <image class="search-icon" src="http://www.clker.com/cliparts/n/U/H/1/H/u/search-icon-white-one-md.png"></image>
+            <text class="app-header-title">Walkins Nearby</text>
+        </div>
+    </div>
+    <div class="slider">
+      
     </div>
   </div>
 </template>
 
-<script>
-  import AppHeader from '../components/app-header.vue'
-  import Story from '../components/story.vue'
-
-  export default {
-    components: { AppHeader, Story },
-    props: {
-      type: {
-        type: String,
-        required: true,
-        default: 'top'
-      }
-    },
-    data () {
-      return {
-        loading: true
-      }
-    },
-
-    computed: {
-      stories () {
-        return this.$store.getters.activeItems
-      }
-    },
-
-    methods: {
-      fetchListData () {
-        this.loading = true
-        this.$store.dispatch('FETCH_LIST_DATA', {
-          type: this.type
-        }).then(() => {
-          this.loading = false
-        })
-      },
-      loadMoreStories () {
-        this.loading = true
-        this.$store.dispatch('LOAD_MORE_ITEMS').then(() => {
-          this.loading = false
-        })
-      }
-    },
-
-    created () {
-      this.fetchListData()
-    }
-  }
-</script>
-
-<style scoped>
-  .stories-view {
-    height: 100%;
-  }
-  .story-cell {
-    margin-bottom: 3px;
-    border-bottom-width: 2px;
-    border-bottom-style: solid;
-    border-bottom-color: #DDDDDD;
-    background-color: #FFFFFF;
-  }
-  .loading {
-    width: 750px;
-    height: 120px;
+<style type="text/css">
+  
+  .stories-view{
     display: flex;
-    align-items: center;
-    justify-content: center;
+    flex-direction: column;
   }
-  .loading-text {
-    margin: auto;
+  .header{
+    width: 750px;
+  }
+  .search{
+    height: 110px;
+    width: 750px;
+    background-color: red;
     text-align: center;
-    font-size: 40px;
-    color: #BBB;
+    color: white;
   }
+
+  .slider{
+    background-color: blue;
+    flex: 1;
+    width: 750px;
+  } 
+
+  .search-icon{
+    height: 45px;
+    width: 45px;
+    position: absolute;
+    right: 30px;
+    top: 30px;
+  }
+
+  .app-header-title{
+    position: absolute;
+    left: 200px;
+    right: 0;
+    top: 20px;
+    font-size: 50px;
+    color: white;
+  }
+
+  
 </style>
