@@ -7,7 +7,7 @@
         </div>
     </div>
     <div class="slider">
-      
+      <router-view style="flex:1"></router-view>
     </div>
   </div>
 </template>
@@ -20,19 +20,23 @@
   }
   .header{
     width: 750px;
+    position: fixed;
+    top: 0;
+    z-index: 999;
   }
   .search{
     height: 110px;
     width: 750px;
-    background-color: red;
+    background-color: #1976D2;
     text-align: center;
     color: white;
   }
 
   .slider{
-    background-color: blue;
     flex: 1;
     width: 750px;
+    padding-top: 130px;
+    background-color: lightgrey;
   } 
 
   .search-icon{

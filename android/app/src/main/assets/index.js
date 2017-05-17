@@ -83,20 +83,24 @@ var _vueRouter = __webpack_require__(4);
 
 var _vueRouter2 = _interopRequireDefault(_vueRouter);
 
-var _StoriesView = __webpack_require__(5);
+var _StoriesView = __webpack_require__(6);
 
 var _StoriesView2 = _interopRequireDefault(_StoriesView);
 
+var _ListView = __webpack_require__(5);
+
+var _ListView2 = _interopRequireDefault(_ListView);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// import Vue from 'vue'
 Vue.use(_vueRouter2.default);
 
 // Story view factory
 
+// import Vue from 'vue'
 exports.default = new _vueRouter2.default({
   // mode: 'abstract',
-  routes: [{ path: '/', component: _StoriesView2.default }]
+  routes: [{ path: '/', component: _StoriesView2.default, children: [{ path: '/', component: _ListView2.default }] }]
 });
 
 /***/ }),
@@ -107,10 +111,10 @@ var __vue_exports__, __vue_options__
 var __vue_styles__ = []
 
 /* script */
-__vue_exports__ = __webpack_require__(6)
+__vue_exports__ = __webpack_require__(7)
 
 /* template */
-var __vue_template__ = __webpack_require__(9)
+var __vue_template__ = __webpack_require__(13)
 __vue_options__ = __vue_exports__ = __vue_exports__ || {}
 if (
   typeof __vue_exports__.default === "object" ||
@@ -161,9 +165,37 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 // create the app instance.
 // here we inject the router and store to all child components,
 // making them available everywhere as `this.$router` and `this.$store`.
+// new Vue(Vue.util.extend({ el: '#root', router}, App))
 
 // import Vue from 'vue'
-new Vue(Vue.util.extend({ el: '#root', router: _router2.default }, _App2.default));
+var stream = weex.requireModule('stream');
+new Vue({
+	el: '#root',
+	data: {
+		temp: []
+	},
+	render: function render(h) {
+		return h(_App2.default);
+	},
+	router: _router2.default,
+	methods: {
+		populateData: function populateData(repo) {
+			var self = this;
+			console.log("function being called");
+			return stream.fetch({
+				method: 'GET',
+				type: 'json',
+				url: 'https://walkin.asiatrotter.org/api/v1/nearby?lat=12.9716&lng=77.5946&radius=15&query=&limit=20&page=&categoryId=1&city='
+			}, function (res) {
+				self.temp = res.data;
+			});
+		}
+	},
+	created: function created() {
+		console.log("created!!");
+		this.populateData();
+	}
+});
 
 _router2.default.push('/');
 
@@ -2838,11 +2870,55 @@ var __vue_exports__, __vue_options__
 var __vue_styles__ = []
 
 /* styles */
-__vue_styles__.push(__webpack_require__(7)
+__vue_styles__.push(__webpack_require__(9)
+)
+
+/* script */
+__vue_exports__ = __webpack_require__(8)
+
+/* template */
+var __vue_template__ = __webpack_require__(11)
+__vue_options__ = __vue_exports__ = __vue_exports__ || {}
+if (
+  typeof __vue_exports__.default === "object" ||
+  typeof __vue_exports__.default === "function"
+) {
+if (Object.keys(__vue_exports__).some(function (key) { return key !== "default" && key !== "__esModule" })) {console.error("named exports are not supported in *.vue files.")}
+__vue_options__ = __vue_exports__ = __vue_exports__.default
+}
+if (typeof __vue_options__ === "function") {
+  __vue_options__ = __vue_options__.options
+}
+__vue_options__.__file = "/home/deepak/projects/walkins-native/weex-hackernews/src/components/ListView.vue"
+__vue_options__.render = __vue_template__.render
+__vue_options__.staticRenderFns = __vue_template__.staticRenderFns
+__vue_options__._scopeId = "data-v-619b67ec"
+__vue_options__.style = __vue_options__.style || {}
+__vue_styles__.forEach(function (module) {
+  for (var name in module) {
+    __vue_options__.style[name] = module[name]
+  }
+})
+if (typeof __register_static_styles__ === "function") {
+  __register_static_styles__(__vue_options__._scopeId, __vue_styles__)
+}
+
+module.exports = __vue_exports__
+
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var __vue_exports__, __vue_options__
+var __vue_styles__ = []
+
+/* styles */
+__vue_styles__.push(__webpack_require__(10)
 )
 
 /* template */
-var __vue_template__ = __webpack_require__(8)
+var __vue_template__ = __webpack_require__(12)
 __vue_options__ = __vue_exports__ = __vue_exports__ || {}
 if (
   typeof __vue_exports__.default === "object" ||
@@ -2872,7 +2948,7 @@ module.exports = __vue_exports__
 
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2897,7 +2973,90 @@ exports.default = {
 };
 
 /***/ }),
-/* 7 */
+/* 8 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+exports.default = {
+	computed: {
+		jobsList: function jobsList() {
+			return this.$root.$data.temp;
+		}
+	}
+
+};
+
+/***/ }),
+/* 9 */
+/***/ (function(module, exports) {
+
+module.exports = {
+  "list": {
+    "display": "flex",
+    "flexDirection": "row",
+    "paddingLeft": 20,
+    "paddingRight": 20,
+    "paddingBottom": 10,
+    "paddingTop": 10
+  },
+  "list-info": {
+    "width": 710,
+    "padding": 20,
+    "backgroundColor": "#FFFFFF"
+  },
+  "list-data": {
+    "width": 578,
+    "padding": 5,
+    "fontSize": 30
+  },
+  "list-distance": {
+    "position": "absolute",
+    "top": 40,
+    "right": 40,
+    "fontSize": 30
+  },
+  "list-apply": {
+    "position": "absolute",
+    "bottom": 40,
+    "right": 40,
+    "fontSize": 30,
+    "paddingLeft": 25,
+    "paddingRight": 25,
+    "paddingTop": 15,
+    "paddingBottom": 15,
+    "backgroundColor": "#1976D2",
+    "color": "#FFFFFF"
+  }
+}
+
+/***/ }),
+/* 10 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -2906,19 +3065,23 @@ module.exports = {
     "flexDirection": "column"
   },
   "header": {
-    "width": 750
+    "width": 750,
+    "position": "fixed",
+    "top": 0,
+    "zIndex": 999
   },
   "search": {
     "height": 110,
     "width": 750,
-    "backgroundColor": "#FF0000",
+    "backgroundColor": "#1976D2",
     "textAlign": "center",
     "color": "#FFFFFF"
   },
   "slider": {
-    "backgroundColor": "#0000FF",
     "flex": 1,
-    "width": 750
+    "width": 750,
+    "paddingTop": 130,
+    "backgroundColor": "#D3D3D3"
   },
   "search-icon": {
     "height": 45,
@@ -2938,19 +3101,57 @@ module.exports = {
 }
 
 /***/ }),
-/* 8 */
+/* 11 */
 /***/ (function(module, exports) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _vm._m(0)
-},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', [_c('scroller', _vm._l((_vm.jobsList), function(item) {
+    return _c('div', [_c('div', {
+      staticClass: ["list"]
+    }, [_c('div', {
+      staticClass: ["list-info"]
+    }, [_c('text', {
+      staticClass: ["list-title", "list-data"]
+    }, [_c('image', {
+      staticClass: ["list-title-image"],
+      attrs: {
+        "src": "https://cdn4.iconfinder.com/data/icons/dot/256/suitcase_travel.png"
+      }
+    }), _vm._v(_vm._s(item.title))]), _c('text', {
+      staticClass: ["list-companyName", "list-data"]
+    }, [_vm._v(_vm._s(item.companyName))]), (item.phone != '') ? _c('text', {
+      staticClass: ["list-phone", "list-data"]
+    }, [_vm._v(_vm._s(item.phone.substring(0, 20).match(/[\d, ]/g).join("")))]) : _c('text', {
+      staticClass: ["list-phone", "list-data"]
+    }, [_vm._v("N/A")])]), _c('text', {
+      staticClass: ["list-distance"]
+    }, [_vm._v(_vm._s(Math.round(item.distance).toFixed(1)) + " kms")]), _c('text', {
+      staticClass: ["list-apply"]
+    }, [_vm._v("Apply")])])])
+  }))])
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+
+/***/ }),
+/* 12 */
+/***/ (function(module, exports) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
     staticClass: ["stories-view"],
     appendAsTree: true,
     attrs: {
       "append": "tree"
     }
-  }, [_c('div', {
+  }, [_vm._m(0), _c('div', {
+    staticClass: ["slider"]
+  }, [_c('router-view', {
+    staticStyle: {
+      flex: "1"
+    }
+  })], 1)])
+},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
     staticClass: ["header"]
   }, [_c('div', {
     staticClass: ["search"]
@@ -2961,14 +3162,12 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }), _c('text', {
     staticClass: ["app-header-title"]
-  }, [_vm._v("Walkins Nearby")])])]), _c('div', {
-    staticClass: ["slider"]
-  })])
+  }, [_vm._v("Walkins Nearby")])])])
 }]}
 module.exports.render._withStripped = true
 
 /***/ }),
-/* 9 */
+/* 13 */
 /***/ (function(module, exports) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
