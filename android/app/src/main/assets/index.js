@@ -83,7 +83,7 @@ var _vueRouter = __webpack_require__(4);
 
 var _vueRouter2 = _interopRequireDefault(_vueRouter);
 
-var _StoriesView = __webpack_require__(6);
+var _StoriesView = __webpack_require__(7);
 
 var _StoriesView2 = _interopRequireDefault(_StoriesView);
 
@@ -91,16 +91,20 @@ var _ListView = __webpack_require__(5);
 
 var _ListView2 = _interopRequireDefault(_ListView);
 
+var _DetailView = __webpack_require__(6);
+
+var _DetailView2 = _interopRequireDefault(_DetailView);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+// import Vue from 'vue'
 Vue.use(_vueRouter2.default);
 
 // Story view factory
 
-// import Vue from 'vue'
 exports.default = new _vueRouter2.default({
   // mode: 'abstract',
-  routes: [{ path: '/', component: _StoriesView2.default, children: [{ path: '/', component: _ListView2.default }] }]
+  routes: [{ path: '/', component: _StoriesView2.default, children: [{ path: '/', component: _ListView2.default }] }, { path: '/detail/:jobId', component: _DetailView2.default }]
 });
 
 /***/ }),
@@ -111,10 +115,10 @@ var __vue_exports__, __vue_options__
 var __vue_styles__ = []
 
 /* script */
-__vue_exports__ = __webpack_require__(7)
+__vue_exports__ = __webpack_require__(8)
 
 /* template */
-var __vue_template__ = __webpack_require__(13)
+var __vue_template__ = __webpack_require__(17)
 __vue_options__ = __vue_exports__ = __vue_exports__ || {}
 if (
   typeof __vue_exports__.default === "object" ||
@@ -2870,14 +2874,14 @@ var __vue_exports__, __vue_options__
 var __vue_styles__ = []
 
 /* styles */
-__vue_styles__.push(__webpack_require__(9)
+__vue_styles__.push(__webpack_require__(12)
 )
 
 /* script */
-__vue_exports__ = __webpack_require__(8)
+__vue_exports__ = __webpack_require__(9)
 
 /* template */
-var __vue_template__ = __webpack_require__(11)
+var __vue_template__ = __webpack_require__(15)
 __vue_options__ = __vue_exports__ = __vue_exports__ || {}
 if (
   typeof __vue_exports__.default === "object" ||
@@ -2914,11 +2918,55 @@ var __vue_exports__, __vue_options__
 var __vue_styles__ = []
 
 /* styles */
-__vue_styles__.push(__webpack_require__(10)
+__vue_styles__.push(__webpack_require__(11)
+)
+
+/* script */
+__vue_exports__ = __webpack_require__(10)
+
+/* template */
+var __vue_template__ = __webpack_require__(14)
+__vue_options__ = __vue_exports__ = __vue_exports__ || {}
+if (
+  typeof __vue_exports__.default === "object" ||
+  typeof __vue_exports__.default === "function"
+) {
+if (Object.keys(__vue_exports__).some(function (key) { return key !== "default" && key !== "__esModule" })) {console.error("named exports are not supported in *.vue files.")}
+__vue_options__ = __vue_exports__ = __vue_exports__.default
+}
+if (typeof __vue_options__ === "function") {
+  __vue_options__ = __vue_options__.options
+}
+__vue_options__.__file = "/home/deepak/projects/walkins-native/weex-hackernews/src/views/DetailView.vue"
+__vue_options__.render = __vue_template__.render
+__vue_options__.staticRenderFns = __vue_template__.staticRenderFns
+__vue_options__._scopeId = "data-v-44c4f3b9"
+__vue_options__.style = __vue_options__.style || {}
+__vue_styles__.forEach(function (module) {
+  for (var name in module) {
+    __vue_options__.style[name] = module[name]
+  }
+})
+if (typeof __register_static_styles__ === "function") {
+  __register_static_styles__(__vue_options__._scopeId, __vue_styles__)
+}
+
+module.exports = __vue_exports__
+
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var __vue_exports__, __vue_options__
+var __vue_styles__ = []
+
+/* styles */
+__vue_styles__.push(__webpack_require__(13)
 )
 
 /* template */
-var __vue_template__ = __webpack_require__(12)
+var __vue_template__ = __webpack_require__(16)
 __vue_options__ = __vue_exports__ = __vue_exports__ || {}
 if (
   typeof __vue_exports__.default === "object" ||
@@ -2948,7 +2996,7 @@ module.exports = __vue_exports__
 
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2973,7 +3021,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3008,12 +3056,224 @@ exports.default = {
 		jobsList: function jobsList() {
 			return this.$root.$data.temp;
 		}
+	},
+	methods: {
+		takeroute: function takeroute(index) {
+			this.$router.push('/detail/' + index + '');
+			console.log(index);
+		}
 	}
-
 };
 
 /***/ }),
-/* 9 */
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+var stream = weex.requireModule('stream');
+exports.default = {
+  data: function data() {
+    return {
+      param: this.$route.params.jobId,
+      maplat: '',
+      maplong: '',
+      url: ''
+    };
+  },
+  computed: {
+    current: function current() {
+      return this.$root.$data.temp[this.param];
+    },
+    mapurl: function mapurl() {
+
+      return "https://maps.googleapis.com/maps/api/staticmap?center=" + this.maplat + "," + this.maplong + "&zoom=15&size=750x400&maptype=roadmap&key=AIzaSyBMAtpMuPIgiMTnAdlh22w9ITb_BpkrlNc";
+    }
+  },
+  methods: {
+    getlatlong: function getlatlong() {
+      var self = this;
+      return stream.fetch({
+        method: 'GET',
+        type: 'json',
+        url: 'https://maps.googleapis.com/maps/api/geocode/json?address=' + this.current.companyName + ',' + this.current.workLocation + '&key=AIzaSyCYvnTorY23mtCZNzQLpLxE2GdhuYBKMcM'
+      }, function (res) {
+        self.maplat = res.data.results[0].geometry.location.lat;
+        self.maplong = res.data.results[0].geometry.location.lng;
+      });
+    }
+  },
+  watch: {
+    'current': function current(a, b) {
+      console.log(a);
+      this.getlatlong();
+    }
+  },
+  created: function created() {
+    this.current = this.$root.$data.temp[this.param];
+    this.getlatlong();
+  }
+};
+
+/***/ }),
+/* 11 */
+/***/ (function(module, exports) {
+
+module.exports = {
+  "container": {
+    "position": "relative",
+    "flex": 1,
+    "backgroundColor": "#ffffff"
+  },
+  "detail-map": {
+    "height": 500
+  },
+  "map": {
+    "height": 500,
+    "width": 750
+  },
+  "detail-header": {
+    "height": 110,
+    "width": 750,
+    "backgroundColor": "#1976D2",
+    "color": "#FFFFFF",
+    "position": "relative"
+  },
+  "detail-header-back": {
+    "position": "absolute",
+    "top": 30,
+    "height": 40,
+    "width": 40,
+    "left": 25,
+    "color": "#ffffff"
+  },
+  "detail-title": {
+    "fontSize": 45,
+    "color": "#FFFFFF",
+    "textAlign": "center",
+    "width": 450,
+    "paddingTop": 25,
+    "marginLeft": 150,
+    "marginRight": 150
+  },
+  "detail-info-text": {
+    "paddingLeft": 25,
+    "paddingRight": 25,
+    "paddingTop": 20,
+    "paddingBottom": 20,
+    "fontSize": 40,
+    "overflow": "visible"
+  },
+  "detail-info": {
+    "padding": 20
+  },
+  "bold": {
+    "fontWeight": "bold",
+    "display": "inline",
+    "fontSize": 40
+  }
+}
+
+/***/ }),
+/* 12 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -3056,7 +3316,7 @@ module.exports = {
 }
 
 /***/ }),
-/* 10 */
+/* 13 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -3065,10 +3325,7 @@ module.exports = {
     "flexDirection": "column"
   },
   "header": {
-    "width": 750,
-    "position": "fixed",
-    "top": 0,
-    "zIndex": 999
+    "width": 750
   },
   "search": {
     "height": 110,
@@ -3077,15 +3334,14 @@ module.exports = {
     "textAlign": "center",
     "color": "#FFFFFF"
   },
-  "slider": {
+  "scroller": {
     "flex": 1,
     "width": 750,
-    "paddingTop": 130,
     "backgroundColor": "#D3D3D3"
   },
   "search-icon": {
-    "height": 45,
-    "width": 45,
+    "height": 40,
+    "width": 40,
     "position": "absolute",
     "right": 30,
     "top": 30
@@ -3101,12 +3357,73 @@ module.exports = {
 }
 
 /***/ }),
-/* 11 */
+/* 14 */
 /***/ (function(module, exports) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', [_c('scroller', _vm._l((_vm.jobsList), function(item) {
-    return _c('div', [_c('div', {
+  return _c('div', {
+    staticClass: ["detailView"]
+  }, [_c('div', {
+    staticClass: ["detail-header"]
+  }, [_c('image', {
+    staticClass: ["detail-header-back"],
+    attrs: {
+      "src": "../src/back-icon.png"
+    }
+  }), _c('text', {
+    staticClass: ["detail-title"]
+  }, [_vm._v(_vm._s(_vm.current.title))])]), _c('scroller', [_c('div', {
+    staticClass: ["map"]
+  }, [_c('image', {
+    staticClass: ["detail-map"],
+    attrs: {
+      "src": _vm.mapurl
+    }
+  })]), _c('div', {
+    staticClass: ["detail-info"]
+  }, [_c('text', {
+    staticClass: ["detail-info-text"]
+  }, [_vm._v("Title: " + _vm._s(_vm.current.title))]), _c('text', {
+    staticClass: ["detail-info-text"]
+  }, [_vm._v("Company Name : " + _vm._s(_vm.current.companyName))]), _c('text', {
+    staticClass: ["detail-info-text"]
+  }, [_vm._v("Job Description : " + _vm._s(_vm.current.jobDescription))]), (_vm.current.website != '') ? _c('text', {
+    staticClass: ["detail-info-text"]
+  }, [_vm._v("Website : " + _vm._s(_vm.current.website))]) : _c('text', {
+    staticClass: ["detail-info-text"]
+  }, [_vm._v("Website : N/A")]), (_vm.current.experience != '') ? _c('text', {
+    staticClass: ["detail-info-text"]
+  }, [_vm._v("Experience : " + _vm._s(_vm.current.experience))]) : _c('text', {
+    staticClass: ["detail-info-text"]
+  }, [_vm._v("Experience : N/A")]), (_vm.current.qualification != '') ? _c('text', {
+    staticClass: ["detail-info-text"]
+  }, [_vm._v("Qualification : " + _vm._s(_vm.current.qualification))]) : _c('text', {
+    staticClass: ["detail-info-text"]
+  }, [_vm._v("Qualification : N/A ")]), (_vm.current.salary != '') ? _c('text', {
+    staticClass: ["detail-info-text"]
+  }, [_vm._v("Salary : " + _vm._s(_vm.current.salary))]) : _c('text', {
+    staticClass: ["detail-info-text"]
+  }, [_vm._v("Salary : N/A")]), (_vm.current.phone != '') ? _c('text', {
+    staticClass: ["detail-info-text"]
+  }, [_vm._v("Phone : " + _vm._s(_vm.current.phone.substring(0, 20).match(/[\d, ]/g).join("")) + " ")]) : _c('text', {
+    staticClass: ["detail-info-text"]
+  }, [_vm._v("Phone : N/A")])])])])
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+
+/***/ }),
+/* 15 */
+/***/ (function(module, exports) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', [_c('scroller', _vm._l((_vm.jobsList), function(item, index) {
+    return _c('div', {
+      on: {
+        "click": function($event) {
+          _vm.takeroute(index)
+        }
+      }
+    }, [_c('div', {
       staticClass: ["list"]
     }, [_c('div', {
       staticClass: ["list-info"]
@@ -3133,7 +3450,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
 module.exports.render._withStripped = true
 
 /***/ }),
-/* 12 */
+/* 16 */
 /***/ (function(module, exports) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -3144,7 +3461,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "append": "tree"
     }
   }, [_vm._m(0), _c('div', {
-    staticClass: ["slider"]
+    staticClass: ["scroller"]
   }, [_c('router-view', {
     staticStyle: {
       flex: "1"
@@ -3167,7 +3484,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
 module.exports.render._withStripped = true
 
 /***/ }),
-/* 13 */
+/* 17 */
 /***/ (function(module, exports) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;

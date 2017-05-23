@@ -1,7 +1,7 @@
 <template>
 	<div>
-		<scroller>
-			<div v-for="item in jobsList">
+		<scroller @loadmore="loadMoreData" loadmoreoffset="50">
+			<div v-for="(item,index) in jobsList" v-on:click="takeroute(index)">
 				<div class="list"> 
 					<div class="list-info">
 						<text class="list-title list-data"><image class="list-title-image" src="https://cdn4.iconfinder.com/data/icons/dot/256/suitcase_travel.png"></image>{{item.title}}</text>
@@ -25,7 +25,15 @@
 				return this.$root.$data.temp;
 			},
 		},
-
+		methods : {
+			takeroute : function(index) {
+				this.$router.push('/detail/'+index+'');
+				console.log(index);
+			},
+			loadMoreData : function() {
+				console.log('Data will be loaded now');
+			}
+		}
 	} 
 </script>
 

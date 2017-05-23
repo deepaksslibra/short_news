@@ -6,13 +6,13 @@
             <text class="app-header-title">Walkins Nearby</text>
         </div>
     </div>
-    <div class="slider">
+    <div class="scroller">
       <router-view style="flex:1"></router-view>
     </div>
   </div>
 </template>
 
-<style type="text/css">
+<style type="text/css" scoped>
   
   .stories-view{
     display: flex;
@@ -20,9 +20,6 @@
   }
   .header{
     width: 750px;
-    position: fixed;
-    top: 0;
-    z-index: 999;
   }
   .search{
     height: 110px;
@@ -32,16 +29,15 @@
     color: white;
   }
 
-  .slider{
+  .scroller{
     flex: 1;
     width: 750px;
-    padding-top: 130px;
     background-color: lightgrey;
   } 
 
   .search-icon{
-    height: 45px;
-    width: 45px;
+    height: 40px;
+    width: 40px;
     position: absolute;
     right: 30px;
     top: 30px;
