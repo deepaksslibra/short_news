@@ -1,14 +1,18 @@
 <template>
   <div class="detailView"> 
     <div class="detail-header">
-      <image class="detail-header-back" src="../src/back-icon.png"></image>
+      <image @click="handleRoute" class="detail-header-back" src="https://uploader-assets.s3.ap-south-1.amazonaws.com/back-icon.png"></image>
       <text class="detail-title">{{current.title}}</text>
     </div>
     <scroller>
       <div class="map">
         <image class="detail-map" :src="mapurl"></image>
+        <web :src="current.source"></web>
       </div>
       <div class="detail-info">
+          <a class="detail-apply" :href="current.source">
+            <text class="detail-apply-text">Apply</text>
+          </a>
           <text class="detail-info-text" >Title: {{current.title}}</text>
           <text class="detail-info-text" >Company Name : {{current.companyName}}</text>
           <text class="detail-info-text" >Job Description : {{current.jobDescription}}</text>
@@ -22,6 +26,9 @@
           <text  class="detail-info-text" v-else>Salary : N/A</text>
           <text  class="detail-info-text" v-if="current.phone != ''" >Phone : {{current.phone.substring(0,20).match(/[\d, ]/g).join("")}} </text>
           <text  class="detail-info-text" v-else>Phone : N/A</text>
+          <a class="detail-apply" :href="current.source"  >
+            <text class="detail-apply-text">Apply</text>
+          </a>
       </div>
     </scroller>  
   </div>
@@ -68,6 +75,9 @@
     padding-top: 25px;
     margin-left: 150px;
     margin-right: 150px;
+    text-overflow: ellipsis;
+    height: 77px;
+    overflow: hidden;
   }
 
   .detail-info-text{      
@@ -86,6 +96,37 @@
     font-weight: bold;
     display: inline;
     font-size: 40px;
+  }
+
+  .detail-apply{
+    margin-top: 40px;
+    margin-bottom: 40px;
+    /* width: 750px; */
+    text-align: center;
+    border: none;
+    background-color: #1976D2;
+    margin-left: 250px;
+    margin-right: 250px;
+  }
+
+  .detail-apply-text{
+    font-size: 30px;
+    /*padding: 20px 30px;*/
+    padding-top: 20px;
+    padding-bottom: 20px;
+    padding-left: 30px;
+    padding-right: 30px;
+    color: white;
+    /* width: 111px; */
+    /* display: block; */
+    text-align: center;
+    /* margin-left: 275px; */
+    /* margin-right: 275px; */
+  }
+
+  .web{
+    height: 500px;
+    width: 750px;
   }
 
 </style>
@@ -122,6 +163,9 @@
           self.maplat = res.data.results[0].geometry.location.lat;
           self.maplong = res.data.results[0].geometry.location.lng;
         })
+      },
+      handleRoute : function() {
+        this.$router.replace('/');
       }
     },
     watch:{
@@ -133,6 +177,7 @@
     created : function() {
       this.current = this.$root.$data.temp[this.param];
       this.getlatlong();
+      this.$root.$data.redirectFromDetail = true;
     }
   }  
   
