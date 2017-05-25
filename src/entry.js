@@ -34,7 +34,7 @@ new Vue ({
         return stream.fetch({
           method: 'GET',
           type: 'json',
-          url: 'https://walkin.asiatrotter.org/api/v1/nearby?lat=12.9716&lng=77.5946&radius=15&query='+this.query+'&limit=10&page='+self.page+'&categoryId=1&city='
+          url: 'https://walkin.asiatrotter.org/api/v1/nearby?lat=12.9716&lng=77.5946&radius=15&query='+this.query+'&limit=50&page='+self.page+'&categoryId=1&city='
         },function(res){
         	if(res.data.length == 0){
         		self.isDataOver = true;

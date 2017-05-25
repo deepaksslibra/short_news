@@ -202,7 +202,7 @@ new Vue({
 			return stream.fetch({
 				method: 'GET',
 				type: 'json',
-				url: 'https://walkin.asiatrotter.org/api/v1/nearby?lat=12.9716&lng=77.5946&radius=15&query=' + this.query + '&limit=10&page=' + self.page + '&categoryId=1&city='
+				url: 'https://walkin.asiatrotter.org/api/v1/nearby?lat=12.9716&lng=77.5946&radius=15&query=' + this.query + '&limit=50&page=' + self.page + '&categoryId=1&city='
 			}, function (res) {
 				if (res.data.length == 0) {
 					self.isDataOver = true;
@@ -3140,15 +3140,12 @@ Object.defineProperty(exports, "__esModule", {
 //
 //
 //
-//
-//
-//
 
 exports.default = {
 	data: function data() {
 		return {
 			showLoading: 'hide',
-			canShowLoading: false
+			hideLoading: 'hide'
 		};
 	},
 	computed: {
@@ -3168,16 +3165,19 @@ exports.default = {
 			var _this = this;
 
 			console.log('Data will be loaded now');
-			if (!this.$root.$data.isDataOver) this.showLoading = 'show';
-			this.canShowLoading = true;
-			var self = this;
+			if (!this.$root.$data.isDataOver) {
+				this.showLoading = 'show';
+				this.hideLoading = 'hide';
+			}
 			setTimeout(function () {
 				if (!_this.$root.$data.isDataOver) {
 					_this.$root.$emit('get-next-data');
-					// this.showLoading = false;	
+					_this.showLoading = 'hide';
+					_this.hideLoading = 'show';
 				} else {
 					console.log("Data is over");
-					self.showLoading = 'hide';
+					_this.showLoading = 'hide';
+					_this.hideLoading = 'show';
 				}
 			}, 1500);
 		},
@@ -3702,15 +3702,6 @@ module.exports = {
     "paddingBottom": 10,
     "paddingTop": 10
   },
-  "refresh-view": {
-    "height": 120,
-    "width": 750,
-    "display": "flex",
-    "MsFlexAlign": "center",
-    "WebkitAlignItems": "center",
-    "WebkitBoxAlign": "center",
-    "alignItems": "center"
-  },
   "list-info": {
     "width": 710,
     "padding": 20,
@@ -3743,14 +3734,19 @@ module.exports = {
     "justifyContent": "center"
   },
   "indicator": {
-    "color": "#888888",
-    "marginTop": 20,
-    "marginBottom": 20,
-    "textAlign": "center",
-    "height": 80,
-    "width": 80,
     "marginLeft": 335,
-    "marginRight": 335
+    "marginRight": 335,
+    "height": 60,
+    "width": 60,
+    "textAlign": "center",
+    "color": "#1976D2"
+  },
+  "tex-indicator": {
+    "color": "#1976D2",
+    "fontSize": 42,
+    "paddingTop": 20,
+    "paddingBottom": 20,
+    "textAlign": "center"
   }
 }
 
@@ -3936,10 +3932,15 @@ module.exports.render._withStripped = true
 /***/ (function(module, exports) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', [_c('list', {
+  return _c('list', {
+    staticClass: ["main-list"],
     appendAsTree: true,
     attrs: {
+      "loadmoreoffset": "50",
       "append": "tree"
+    },
+    on: {
+      "loadmore": _vm.loadMoreData
     }
   }, [_vm._l((_vm.jobsList), function(item, index) {
     return _c('cell', {
@@ -3974,34 +3975,35 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       staticClass: ["list-phone", "list-data"]
     }, [_vm._v("N/A")])]), _c('text', {
       staticClass: ["list-distance"]
-    }, [_vm._v(_vm._s(Math.round(item.distance).toFixed(1)) + " kms")]), _c('a', {
+    }, [_vm._v(_vm._s(Math.round(item.distance).toFixed(1)) + " kms")]), _c('text', {
       staticClass: ["list-apply"],
       on: {
         "click": function($event) {
           _vm.doNothing(index)
         }
       }
-    }, [_vm._v("Apply")])], 1)])
+    }, [_vm._v("Apply")])])])
   }), _c('loading', {
+    staticClass: ["loading"],
     attrs: {
       "display": _vm.showLoading
-    },
-    on: {
-      "loading": _vm.loadMoreData
+    }
+  }, [_c('loading-indicator', {
+    staticClass: ["indicator"],
+    attrs: {
+      "display": _vm.showLoading
+    }
+  })], 1), _c('loading', {
+    staticClass: ["loading"],
+    attrs: {
+      "display": _vm.hideLoading
     }
   }, [_c('text', {
-    staticClass: ["refresh-arrow"],
-    staticStyle: {
-      textAlign: "center",
-      color: "rgb(238, 162, 54)"
+    staticClass: ["text-indicator"],
+    attrs: {
+      "display": _vm.hideLoading
     }
-  }, [_vm._v("Load more")]), _c('loading-indicator', {
-    staticStyle: {
-      height: "60",
-      width: "60",
-      color: "#3192e1"
-    }
-  })], 1)], 2)])
+  }, [_vm._v("No more results..")])])], 2)
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 

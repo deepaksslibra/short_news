@@ -1,4 +1,4 @@
-package com.example.weex.hackernews;    
+package com.example.weex.hackernews;
 
 import android.net.Uri;
 import android.text.TextUtils;
