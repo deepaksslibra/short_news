@@ -1,4 +1,5 @@
 <template>
+	<div class="list-view">
 			<list class="main-list" @loadmore="loadMoreData" loadmoreoffset="50" append='tree'>
 				<cell v-for="(item,index) in jobsList" v-on:click="takeroute(index)" append="tree">
 					<div class="list"> 
@@ -12,10 +13,11 @@
 						<text class="list-apply" v-on:click="doNothing(index)">Apply</text>
 					</div>
 				</cell>
-				<loading class="loading" :display="showLoading">
-			      <loading-indicator class="indicator" :display="showLoading"></loading-indicator>
-			    </loading>
 			</list>
+			<div class="loading" v-if="loading" >
+		      <text class="loading-text">Loading</text>
+		  </div>
+	</div>
 </template>
 
 <script type="text/javascript">
@@ -23,6 +25,7 @@
 		data : function(){
 			return {
 				showLoading : 'hide',
+				loading: false
 			}
 		},
 		computed : {
@@ -31,6 +34,12 @@
 			},
 			isDataOver : function(){
 				return this.$root.$data.isDataOver;
+			},
+			isActive : function(){
+				if (this.showLoading == 'show')
+				 	return true;
+				else
+				 	return false;	
 			}
 		},
 		methods : {
@@ -41,18 +50,13 @@
 			loadMoreData : function() {
 				console.log('Data will be loaded now');
 				if(!this.$root.$data.isDataOver){
-				this.showLoading = 'show';
+					this.showLoading = 'show';
+					this.loading = true;
+					this.$root.$emit('get-next-data');
+					// setTimeout(() => {
+					// 		this.showLoading = 'hide';
+					// },1500)
 				}
-				setTimeout(() => {
-					if(!this.$root.$data.isDataOver){
-						this.$root.$emit('get-next-data');
-						this.showLoading = 'hide';
-					}
-					else{
-						console.log("Data is over");
-						this.showLoading = 'hide';	
-					}
-				},1500)
 			},
 			doNothing : function(index){
 				this.$router.push('/applyhere/'+index+'');
@@ -60,11 +64,36 @@
 		},
 		mounted : function(){
 			console.log(this.$root.$el);
+		},
+		created: function () {
+			var self = this;
+			this.$root.$data.bus.$on("data-fetched", function () {
+				console.log("Data is Fetched....!");
+				self.loading = false;
+			})
 		}
 	} 
 </script>
 
 <style type="text/css">
+	.list-view {
+		height: 100%;
+	}
+
+	.loading {
+	  width: 750px;
+	  height: 120px;
+	  display: flex;
+	  align-items: center;
+	  justify-content: center;
+	}
+	.loading-text {
+	  margin: auto;
+	  text-align: center;
+	  font-size: 40px;
+	  color: #BBB;
+	}
+
 	.list{
 		display: flex;
 		flex-direction: row;
@@ -114,13 +143,7 @@
 	    text-align: center;
 	    color: #1976D2;
     }
-    .tex-indicator {
-    color: #1976D2;
-    font-size: 42px;
-    padding-top: 20px;
-    padding-bottom: 20px;
-    text-align: center;
-	  }
+
 </style>
 
 

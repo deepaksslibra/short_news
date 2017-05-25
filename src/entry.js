@@ -11,6 +11,8 @@ import router from './router'
 // making them available everywhere as `this.$router` and `this.$store`.
 // new Vue(Vue.util.extend({ el: '#root', router}, App))
 var stream = weex.requireModule('stream')
+var bus = new Vue();
+
 new Vue ({
 	el : '#root',
 	data : {
@@ -23,7 +25,9 @@ new Vue ({
 		complete: true,
 		redirectFromDetail : false,
 		currentSearchTerm : '',
-		isDataLoadedInitially : false  
+		isDataLoadedInitially : false,
+		hideLoader : false,
+		bus: bus
 	},
 	render : h => h(App),
 	router : router,
@@ -34,13 +38,14 @@ new Vue ({
         return stream.fetch({
           method: 'GET',
           type: 'json',
-          url: 'https://walkin.asiatrotter.org/api/v1/nearby?lat=12.9716&lng=77.5946&radius=15&query='+this.query+'&limit=50&page='+self.page+'&categoryId=1&city='
+          url: 'https://walkin.asiatrotter.org/api/v1/nearby?lat=12.9716&lng=77.5946&radius=15&query='+this.query+'&limit=100&page='+self.page+'&categoryId=1&city='
         },function(res){
         	if(res.data.length == 0){
         		self.isDataOver = true;
         		console.log("is dataOver is set to true");
+        		self.hideLoader = true;
         	}
-        	else if(res.data.length > 0 && res.data.length < 10){
+        	else if(res.data.length > 0 && res.data.length < 100){
         		for(var i = 0 ; i < res.data.length ; i ++){
         			self.temp.push(res.data[i]);
         			console.log("data less than 10");        		}
@@ -54,6 +59,8 @@ new Vue ({
         		self.isDataOver = false;
         		self.isDataLoadedInitially = true;
         	}
+
+        	self.bus.$emit("data-fetched");
         })
       }
 	},

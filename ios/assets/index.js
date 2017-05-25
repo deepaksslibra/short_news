@@ -189,7 +189,8 @@ new Vue({
 		complete: true,
 		redirectFromDetail: false,
 		currentSearchTerm: '',
-		isDataLoadedInitially: false
+		isDataLoadedInitially: false,
+		hideLoader: false
 	},
 	render: function render(h) {
 		return h(_App2.default);
@@ -202,11 +203,12 @@ new Vue({
 			return stream.fetch({
 				method: 'GET',
 				type: 'json',
-				url: 'https://walkin.asiatrotter.org/api/v1/nearby?lat=12.9716&lng=77.5946&radius=15&query=' + this.query + '&limit=50&page=' + self.page + '&categoryId=1&city='
+				url: 'https://walkin.asiatrotter.org/api/v1/nearby?lat=12.9716&lng=77.5946&radius=15&query=' + this.query + '&limit=100&page=' + self.page + '&categoryId=1&city='
 			}, function (res) {
 				if (res.data.length == 0) {
 					self.isDataOver = true;
 					console.log("is dataOver is set to true");
+					self.hideLoader = true;
 				} else if (res.data.length > 0 && res.data.length < 10) {
 					for (var i = 0; i < res.data.length; i++) {
 						self.temp.push(res.data[i]);
@@ -3139,13 +3141,12 @@ Object.defineProperty(exports, "__esModule", {
 //
 //
 //
-//
 
 exports.default = {
 	data: function data() {
 		return {
 			showLoading: 'hide',
-			hideLoading: 'hide'
+			timeout: null
 		};
 	},
 	computed: {
@@ -3154,6 +3155,9 @@ exports.default = {
 		},
 		isDataOver: function isDataOver() {
 			return this.$root.$data.isDataOver;
+		},
+		getheight: function getheight() {
+			if (this.showLoading == 'show') return 60;else return 0;
 		}
 	},
 	methods: {
@@ -3161,25 +3165,25 @@ exports.default = {
 			this.$router.push('/detail/' + index + '');
 			console.log(index);
 		},
+		conditionalLoad: function conditionalLoad() {
+			if (!this.isDataOver) {
+				this.loadMoreData();
+			} else {
+				this.showLoading = 'hide';
+			}
+		},
 		loadMoreData: function loadMoreData() {
 			var _this = this;
 
+			clearTimeout(this.timeout);
 			console.log('Data will be loaded now');
 			if (!this.$root.$data.isDataOver) {
 				this.showLoading = 'show';
-				this.hideLoading = 'hide';
+				this.timeout = setTimeout(function () {
+					_this.showLoading = 'hide';
+					if (!_this.$root.$data.isDataOver) _this.$root.$emit('get-next-data');
+				}, 1500);
 			}
-			setTimeout(function () {
-				if (!_this.$root.$data.isDataOver) {
-					_this.$root.$emit('get-next-data');
-					_this.showLoading = 'hide';
-					_this.hideLoading = 'show';
-				} else {
-					console.log("Data is over");
-					_this.showLoading = 'hide';
-					_this.hideLoading = 'show';
-				}
-			}, 1500);
 		},
 		doNothing: function doNothing(index) {
 			this.$router.push('/applyhere/' + index + '');
@@ -3187,6 +3191,12 @@ exports.default = {
 	},
 	mounted: function mounted() {
 		console.log(this.$root.$el);
+	},
+	updated: function updated() {
+		console.log("Listview updated");
+		if (this.$root.$data.hideLoader) {
+			this.showLoading = 'hide';
+		}
 	}
 };
 
@@ -3200,12 +3210,6 @@ exports.default = {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -3368,6 +3372,9 @@ exports.default = {
     },
     handleRoute: function handleRoute() {
       this.$router.replace('/');
+    },
+    doNothing: function doNothing() {
+      this.$router.push('/applyhere/' + this.param + '');
     }
   },
   watch: {
@@ -3518,10 +3525,6 @@ exports.default = {
     };
   },
   methods: {
-    showSearch: function showSearch() {
-      console.log("search Clicked !!!");
-      this.search = true;
-    },
     hideSearch: function hideSearch() {
       this.search = false;
       if (this.inputVal != '') this.$root.$emit('get-query-data', '');
@@ -3682,10 +3685,6 @@ module.exports = {
     "paddingRight": 30,
     "color": "#FFFFFF",
     "textAlign": "center"
-  },
-  "web": {
-    "height": 500,
-    "width": 750
   }
 }
 
@@ -3736,17 +3735,9 @@ module.exports = {
   "indicator": {
     "marginLeft": 335,
     "marginRight": 335,
-    "height": 60,
     "width": 60,
     "textAlign": "center",
     "color": "#1976D2"
-  },
-  "tex-indicator": {
-    "color": "#1976D2",
-    "fontSize": 42,
-    "paddingTop": 20,
-    "paddingBottom": 20,
-    "textAlign": "center"
   }
 }
 
@@ -3877,19 +3868,17 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "src": _vm.mapurl
     }
-  }), _c('web', {
-    attrs: {
-      "src": _vm.current.source
-    }
-  })], 1), _c('div', {
+  })]), _c('div', {
     staticClass: ["detail-info"]
   }, [_c('a', {
-    staticClass: ["detail-apply"],
-    attrs: {
-      "href": _vm.current.source
-    }
+    staticClass: ["detail-apply"]
   }, [_c('text', {
-    staticClass: ["detail-apply-text"]
+    staticClass: ["detail-apply-text"],
+    on: {
+      "click": function($event) {
+        _vm.doNothing(_vm.index)
+      }
+    }
   }, [_vm._v("Apply")])]), _c('text', {
     staticClass: ["detail-info-text"]
   }, [_vm._v("Title: " + _vm._s(_vm.current.title))]), _c('text', {
@@ -3917,12 +3906,12 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_vm._v("Phone : " + _vm._s(_vm.current.phone.substring(0, 20).match(/[\d, ]/g).join("")) + " ")]) : _c('text', {
     staticClass: ["detail-info-text"]
   }, [_vm._v("Phone : N/A")]), _c('a', {
-    staticClass: ["detail-apply"],
-    attrs: {
-      "href": _vm.current.source
-    }
+    staticClass: ["detail-apply"]
   }, [_c('text', {
-    staticClass: ["detail-apply-text"]
+    staticClass: ["detail-apply-text"],
+    on: {
+      "click": _vm.doNothing
+    }
   }, [_vm._v("Apply")])])], 1)])])
 },staticRenderFns: []}
 module.exports.render._withStripped = true
@@ -3940,7 +3929,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "append": "tree"
     },
     on: {
-      "loadmore": _vm.loadMoreData
+      "loadmore": _vm.conditionalLoad
     }
   }, [_vm._l((_vm.jobsList), function(item, index) {
     return _c('cell', {
@@ -3983,27 +3972,21 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         }
       }
     }, [_vm._v("Apply")])])])
-  }), _c('loading', {
+  }), (_vm.conditionalLoad) ? _c('loading', {
     staticClass: ["loading"],
+    style: {
+      height: _vm.getheight + 'px'
+    },
     attrs: {
       "display": _vm.showLoading
     }
-  }, [_c('loading-indicator', {
-    staticClass: ["indicator"],
-    attrs: {
-      "display": _vm.showLoading
-    }
-  })], 1), _c('loading', {
-    staticClass: ["loading"],
-    attrs: {
-      "display": _vm.hideLoading
-    }
+  }, [(_vm.conditionalLoad) ? _c('loading-indicator', {
+    staticClass: ["indicator"]
   }, [_c('text', {
-    staticClass: ["text-indicator"],
-    attrs: {
-      "display": _vm.hideLoading
+    staticStyle: {
+      textAlign: "center"
     }
-  }, [_vm._v("No more results..")])])], 2)
+  }, [_vm._v("Loaded....")])]) : _vm._e()], 1) : _vm._e()], 2)
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 
@@ -4031,7 +4014,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "src": "http://www.clker.com/cliparts/n/U/H/1/H/u/search-icon-white-one-md.png"
     },
     on: {
-      "click": _vm.showSearch
+      "click": function($event) {
+        _vm.search = true
+      }
     }
   }), _c('text', {
     staticClass: ["app-header-title"]

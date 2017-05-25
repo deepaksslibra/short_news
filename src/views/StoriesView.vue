@@ -2,7 +2,7 @@
   <div class="stories-view" append="tree">
     <div class="header">
         <div id="searchBar" class="search">
-            <image class="search-icon" src="http://www.clker.com/cliparts/n/U/H/1/H/u/search-icon-white-one-md.png" @click="showSearch"></image>
+            <image class="search-icon" src="http://www.clker.com/cliparts/n/U/H/1/H/u/search-icon-white-one-md.png" @click="search=true"></image>
             <text class="app-header-title">Walkins Nearby</text>
         </div>
 <!--         <div v-if="search" class="search-inputOverlay">
@@ -123,10 +123,6 @@
       }
     },
     methods : {
-      showSearch : function(){
-        console.log("search Clicked !!!");
-        this.search = true;
-      },
       hideSearch : function(){
         this.search = false;
         if(this.inputVal!='')
