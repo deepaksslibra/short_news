@@ -6,11 +6,13 @@
     </div>
     <scroller>
       <div class="map">
-        <image class="detail-map" :src="mapurl"></image>
+        <a href="geo:12.9300487,77.633275">
+          <image class="detail-map" :src="mapurl"></image>
+        </a>
       </div>
       <div class="detail-info">
-          <a class="detail-apply">
-            <text v-on:click="doNothing(index)" class="detail-apply-text">Apply</text>
+          <a class="detail-apply" :href="current.source">
+            <text class="detail-apply-text">Apply</text>
           </a>
           <text class="detail-info-text" >Title: {{current.title}}</text>
           <text class="detail-info-text" >Company Name : {{current.companyName}}</text>
@@ -25,8 +27,8 @@
           <text  class="detail-info-text" v-else>Salary : N/A</text>
           <text  class="detail-info-text" v-if="current.phone != ''" >Phone : {{current.phone.substring(0,20).match(/[\d, ]/g).join("")}} </text>
           <text  class="detail-info-text" v-else>Phone : N/A</text>
-          <a class="detail-apply">
-            <text v-on:click="doNothing" class="detail-apply-text">Apply</text>
+          <a class="detail-apply" :href="current.source">
+            <text class="detail-apply-text">Apply</text>
           </a>
       </div>
     </scroller>  
