@@ -6,7 +6,7 @@
     </div>
     <scroller>
       <div class="map">
-        <a href="geo:12.9300487,77.633275">
+        <a :href="url">
           <image class="detail-map" :src="mapurl"></image>
         </a>
       </div>
@@ -171,12 +171,20 @@
       'current' : function(a,b){
       console.log(a);
       this.getlatlong();
+      },
+      'geo' : function(){
+      this.url = 'geo:'+this.current.companyName+"?q="+''+this.maplat+','+this.maplong+'('+this.current.companyName+')'
       }
     },
     created : function() {
       this.current = this.$root.$data.temp[this.param];
       this.getlatlong();
       this.$root.$data.redirectFromDetail = true;
+    },
+    computed :{
+      geo : function() {
+        return 'geo:'+this.maplat+','+this.maplong+"?q=Norwich+Clinical";
+      }
     }
   }  
   

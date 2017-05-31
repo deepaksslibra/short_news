@@ -177,6 +177,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 // import Vue from 'vue'
 var stream = weex.requireModule('stream');
+var location = weex.requireModule('mylocationmodule');
+var bus = new Vue();
+
 new Vue({
 	el: '#root',
 	data: {
@@ -190,26 +193,47 @@ new Vue({
 		redirectFromDetail: false,
 		currentSearchTerm: '',
 		isDataLoadedInitially: false,
-		hideLoader: false
+		hideLoader: false,
+		bus: bus
+	},
+	computed: {
+		latitude: function latitude() {
+			return this.lat;
+		},
+		longitude: function longitude() {
+			return this.long;
+		}
 	},
 	render: function render(h) {
 		return h(_App2.default);
 	},
 	router: _router2.default,
 	methods: {
+		getLocation: function getLocation() {
+			var self = this;
+			location.getLocation(function (data) {
+				// var loc = JSON.parse(data);
+				self.lat = JSON.parse(data).latitude;
+				console.log("Deepak", self.lat);
+				self.long = JSON.parse(data).longitude;
+				console.log("Deepak 2", self.long);
+				self.populateData();
+			});
+		},
 		populateData: function populateData(repo) {
 			var self = this;
-			console.log("function being called");
+			console.log("function being called", this.lat);
+			console.log("function being called 2", self.lat);
 			return stream.fetch({
 				method: 'GET',
 				type: 'json',
-				url: 'https://walkin.asiatrotter.org/api/v1/nearby?lat=12.9716&lng=77.5946&radius=15&query=' + this.query + '&limit=100&page=' + self.page + '&categoryId=1&city='
+				url: 'https://walkin.asiatrotter.org/api/v1/nearby?lat=' + self.latitude + '&lng=' + self.longitude + '&radius=15&query=' + this.query + '&limit=15&page=' + self.page + '&categoryId=1&city='
 			}, function (res) {
 				if (res.data.length == 0) {
 					self.isDataOver = true;
 					console.log("is dataOver is set to true");
 					self.hideLoader = true;
-				} else if (res.data.length > 0 && res.data.length < 10) {
+				} else if (res.data.length > 0 && res.data.length < 15) {
 					for (var i = 0; i < res.data.length; i++) {
 						self.temp.push(res.data[i]);
 						console.log("data less than 10");
@@ -223,12 +247,14 @@ new Vue({
 					self.isDataOver = false;
 					self.isDataLoadedInitially = true;
 				}
+				console.log("REZPONSE", res.data);
+				self.bus.$emit("data-fetched");
 			});
 		}
 	},
 	created: function created() {
 		console.log("created!!");
-		this.populateData();
+		this.getLocation();
 		this.$on('get-next-data', function () {
 			this.page++;
 			console.log("current page : " + this.page);
@@ -3146,7 +3172,7 @@ exports.default = {
 	data: function data() {
 		return {
 			showLoading: 'hide',
-			timeout: null
+			loading: false
 		};
 	},
 	computed: {
@@ -3156,8 +3182,8 @@ exports.default = {
 		isDataOver: function isDataOver() {
 			return this.$root.$data.isDataOver;
 		},
-		getheight: function getheight() {
-			if (this.showLoading == 'show') return 60;else return 0;
+		isActive: function isActive() {
+			if (this.showLoading == 'show') return true;else return false;
 		}
 	},
 	methods: {
@@ -3165,24 +3191,15 @@ exports.default = {
 			this.$router.push('/detail/' + index + '');
 			console.log(index);
 		},
-		conditionalLoad: function conditionalLoad() {
-			if (!this.isDataOver) {
-				this.loadMoreData();
-			} else {
-				this.showLoading = 'hide';
-			}
-		},
 		loadMoreData: function loadMoreData() {
-			var _this = this;
-
-			clearTimeout(this.timeout);
 			console.log('Data will be loaded now');
 			if (!this.$root.$data.isDataOver) {
 				this.showLoading = 'show';
-				this.timeout = setTimeout(function () {
-					_this.showLoading = 'hide';
-					if (!_this.$root.$data.isDataOver) _this.$root.$emit('get-next-data');
-				}, 1500);
+				this.loading = true;
+				this.$root.$emit('get-next-data');
+				// setTimeout(() => {
+				// 		this.showLoading = 'hide';
+				// },1500)
 			}
 		},
 		doNothing: function doNothing(index) {
@@ -3192,11 +3209,12 @@ exports.default = {
 	mounted: function mounted() {
 		console.log(this.$root.$el);
 	},
-	updated: function updated() {
-		console.log("Listview updated");
-		if (this.$root.$data.hideLoader) {
-			this.showLoading = 'hide';
-		}
+	created: function created() {
+		var self = this;
+		this.$root.$data.bus.$on("data-fetched", function () {
+			console.log("Data is Fetched....!");
+			self.loading = false;
+		});
 	}
 };
 
@@ -3210,6 +3228,11 @@ exports.default = {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+//
+//
 //
 //
 //
@@ -3340,7 +3363,7 @@ Object.defineProperty(exports, "__esModule", {
 
 
 var stream = weex.requireModule('stream');
-exports.default = {
+exports.default = _defineProperty({
   data: function data() {
     return {
       param: this.$route.params.jobId,
@@ -3381,6 +3404,9 @@ exports.default = {
     'current': function current(a, b) {
       console.log(a);
       this.getlatlong();
+    },
+    'geo': function geo() {
+      this.url = 'geo:' + this.current.companyName + "?q=" + '' + this.maplat + ',' + this.maplong + '(' + this.current.companyName + ')';
     }
   },
   created: function created() {
@@ -3388,7 +3414,11 @@ exports.default = {
     this.getlatlong();
     this.$root.$data.redirectFromDetail = true;
   }
-};
+}, 'computed', {
+  geo: function geo() {
+    return 'geo:' + this.maplat + ',' + this.maplong + "?q=Norwich+Clinical";
+  }
+});
 
 /***/ }),
 /* 12 */
@@ -3400,9 +3430,6 @@ exports.default = {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-//
-//
-//
 //
 //
 //
@@ -3525,7 +3552,8 @@ exports.default = {
     };
   },
   methods: {
-    hideSearch: function hideSearch() {
+    hideSearch: function hideSearch(event) {
+      this.$refs.inputBar.blur();
       this.search = false;
       if (this.inputVal != '') this.$root.$emit('get-query-data', '');
     },
@@ -3543,6 +3571,13 @@ exports.default = {
         console.log('Input Value:', eve.value);
         if (eve.value.length != 0) self.$root.$emit('get-query-data', eve.value);else self.$root.$emit('get-query-data', '');
       }, 700);
+    },
+    onSearchClick: function onSearchClick() {
+      this.search = true;
+      if (this.search) {
+        this.$refs.inputBar.focus();
+        console.log(this.$refs.inputBar.focus());
+      } else console.log("Swalla :");
     },
     handleCrossClick: function handleCrossClick() {
       this.cross = false;
@@ -3693,6 +3728,21 @@ module.exports = {
 /***/ (function(module, exports) {
 
 module.exports = {
+  "list-view": {
+    "height": 100
+  },
+  "loading": {
+    "width": 750,
+    "height": 120,
+    "display": "flex",
+    "alignItems": "center",
+    "justifyContent": "center"
+  },
+  "loading-text": {
+    "textAlign": "center",
+    "fontSize": 40,
+    "color": "#BBBBBB"
+  },
   "list": {
     "display": "flex",
     "flexDirection": "row",
@@ -3729,12 +3779,10 @@ module.exports = {
     "backgroundColor": "#1976D2",
     "color": "#ffffff"
   },
-  "loading": {
-    "justifyContent": "center"
-  },
   "indicator": {
     "marginLeft": 335,
     "marginRight": 335,
+    "height": 60,
     "width": 60,
     "textAlign": "center",
     "color": "#1976D2"
@@ -3863,22 +3911,24 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: ["detail-title"]
   }, [_vm._v(_vm._s(_vm.current.title))])]), _c('scroller', [_c('div', {
     staticClass: ["map"]
+  }, [_c('a', {
+    attrs: {
+      "href": _vm.url
+    }
   }, [_c('image', {
     staticClass: ["detail-map"],
     attrs: {
       "src": _vm.mapurl
     }
-  })]), _c('div', {
+  })])], 1), _c('div', {
     staticClass: ["detail-info"]
   }, [_c('a', {
-    staticClass: ["detail-apply"]
-  }, [_c('text', {
-    staticClass: ["detail-apply-text"],
-    on: {
-      "click": function($event) {
-        _vm.doNothing(_vm.index)
-      }
+    staticClass: ["detail-apply"],
+    attrs: {
+      "href": _vm.current.source
     }
+  }, [_c('text', {
+    staticClass: ["detail-apply-text"]
   }, [_vm._v("Apply")])]), _c('text', {
     staticClass: ["detail-info-text"]
   }, [_vm._v("Title: " + _vm._s(_vm.current.title))]), _c('text', {
@@ -3906,12 +3956,12 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_vm._v("Phone : " + _vm._s(_vm.current.phone.substring(0, 20).match(/[\d, ]/g).join("")) + " ")]) : _c('text', {
     staticClass: ["detail-info-text"]
   }, [_vm._v("Phone : N/A")]), _c('a', {
-    staticClass: ["detail-apply"]
-  }, [_c('text', {
-    staticClass: ["detail-apply-text"],
-    on: {
-      "click": _vm.doNothing
+    staticClass: ["detail-apply"],
+    attrs: {
+      "href": _vm.current.source
     }
+  }, [_c('text', {
+    staticClass: ["detail-apply-text"]
   }, [_vm._v("Apply")])])], 1)])])
 },staticRenderFns: []}
 module.exports.render._withStripped = true
@@ -3921,7 +3971,9 @@ module.exports.render._withStripped = true
 /***/ (function(module, exports) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('list', {
+  return _c('div', {
+    staticClass: ["list-view"]
+  }, [_c('list', {
     staticClass: ["main-list"],
     appendAsTree: true,
     attrs: {
@@ -3929,9 +3981,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "append": "tree"
     },
     on: {
-      "loadmore": _vm.conditionalLoad
+      "loadmore": _vm.loadMoreData
     }
-  }, [_vm._l((_vm.jobsList), function(item, index) {
+  }, _vm._l((_vm.jobsList), function(item, index) {
     return _c('cell', {
       appendAsTree: true,
       attrs: {
@@ -3972,21 +4024,11 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         }
       }
     }, [_vm._v("Apply")])])])
-  }), (_vm.conditionalLoad) ? _c('loading', {
-    staticClass: ["loading"],
-    style: {
-      height: _vm.getheight + 'px'
-    },
-    attrs: {
-      "display": _vm.showLoading
-    }
-  }, [(_vm.conditionalLoad) ? _c('loading-indicator', {
-    staticClass: ["indicator"]
+  })), (_vm.loading) ? _c('div', {
+    staticClass: ["loading"]
   }, [_c('text', {
-    staticStyle: {
-      textAlign: "center"
-    }
-  }, [_vm._v("Loaded....")])]) : _vm._e()], 1) : _vm._e()], 2)
+    staticClass: ["loading-text"]
+  }, [_vm._v("Loading")])]) : _vm._e()])
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 
@@ -4002,8 +4044,12 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "append": "tree"
     }
   }, [_c('div', {
-    staticClass: ["header"]
+    staticClass: ["header"],
+    attrs: {
+      "id": "header"
+    }
   }, [_c('div', {
+    ref: "searchBar",
     staticClass: ["search"],
     attrs: {
       "id": "searchBar"
@@ -4014,15 +4060,15 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "src": "http://www.clker.com/cliparts/n/U/H/1/H/u/search-icon-white-one-md.png"
     },
     on: {
-      "click": function($event) {
-        _vm.search = true
-      }
+      "click": _vm.onSearchClick
     }
   }), _c('text', {
     staticClass: ["app-header-title"]
   }, [_vm._v("Walkins Nearby")])]), (_vm.search) ? _c('input', {
+    ref: "inputBar",
     staticClass: ["input"],
     attrs: {
+      "id": "inputBar",
       "type": "text",
       "placeholder": "search..",
       "value": (_vm.inputVal)

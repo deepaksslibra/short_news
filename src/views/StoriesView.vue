@@ -1,14 +1,11 @@
 <template>
   <div class="stories-view" append="tree">
-    <div class="header">
-        <div id="searchBar" class="search">
-            <image class="search-icon" src="http://www.clker.com/cliparts/n/U/H/1/H/u/search-icon-white-one-md.png" @click="search=true"></image>
+    <div id="header" class="header">
+        <div ref="searchBar" id="searchBar" class="search">
+            <image class="search-icon" src="http://www.clker.com/cliparts/n/U/H/1/H/u/search-icon-white-one-md.png" @click="onSearchClick"></image>
             <text class="app-header-title">Walkins Nearby</text>
         </div>
-<!--         <div v-if="search" class="search-inputOverlay">
-            <input class="input" type="text" placeholder="search.."></input>
-        </div> -->
-        <input @input="handleInput" v-model="inputVal" v-if="search" class="input" type="text" placeholder="search.."></input>
+        <input ref="inputBar" id="inputBar" @input="handleInput" v-model="inputVal" v-if="search" class="input" type="text" placeholder="search.."></input>
         <image v-if="search" @click="hideSearch" class="search-back" src="https://uploader-assets.s3.ap-south-1.amazonaws.com/black-icon.png"></image>
         <image @click="handleCrossClick" v-if="search && cross" class="search-cross" src="https://image.flaticon.com/icons/png/128/59/59836.png"></image>
     </div>
@@ -123,7 +120,9 @@
       }
     },
     methods : {
-      hideSearch : function(){
+      hideSearch : function(event){
+        console.log(" despacito is ",this.$refs.inputBar);
+        this.$refs.inputBar.blur();
         this.search = false;
         if(this.inputVal!='')
         this.$root.$emit('get-query-data','')
@@ -147,6 +146,18 @@
             self.$root.$emit('get-query-data','')  
         }, 700);
 
+      },
+      onSearchClick : function() {
+        this.search = true;
+        var myVar = setInterval(function(){ myTimer() }, 100);
+        var self = this;
+        function myTimer() {
+            if(self.$refs.inputBar){
+              console.log(" despacito is ",self.$refs.inputBar);
+              self.$refs.inputBar.focus();
+              clearInterval(myVar);
+            }
+        }
       },
       handleCrossClick : function() {
         this.cross = false;
