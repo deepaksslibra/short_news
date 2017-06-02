@@ -3360,6 +3360,19 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 var stream = weex.requireModule('stream');
@@ -3369,16 +3382,13 @@ exports.default = _defineProperty({
       param: this.$route.params.jobId,
       maplat: '',
       maplong: '',
-      url: ''
+      url: '',
+      mapurl: ''
     };
   },
   computed: {
     current: function current() {
       return this.$root.$data.temp[this.param];
-    },
-    mapurl: function mapurl() {
-
-      return "https://maps.googleapis.com/maps/api/staticmap?center=" + this.maplat + "," + this.maplong + "&zoom=15&size=750x400&maptype=roadmap&key=AIzaSyBMAtpMuPIgiMTnAdlh22w9ITb_BpkrlNc";
     }
   },
   methods: {
@@ -3391,6 +3401,7 @@ exports.default = _defineProperty({
       }, function (res) {
         self.maplat = res.data.results[0].geometry.location.lat;
         self.maplong = res.data.results[0].geometry.location.lng;
+        self.mapurl = "http://maps.googleapis.com/maps/api/staticmap?center=" + self.maplat + "," + self.maplong + "&zoom=15&size=750x400&maptype=roadmap&key=AIzaSyBMAtpMuPIgiMTnAdlh22w9ITb_BpkrlNc";
       });
     },
     handleRoute: function handleRoute() {
@@ -3540,6 +3551,34 @@ Object.defineProperty(exports, "__esModule", {
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 exports.default = {
   data: function data() {
@@ -3548,11 +3587,13 @@ exports.default = {
       cross: false,
       isCrossClicked: false,
       inputVal: "",
-      timeout: null
+      timeout: null,
+      isActive: false
     };
   },
   methods: {
     hideSearch: function hideSearch(event) {
+      console.log(" despacito is ", this.$refs.inputBar);
       this.$refs.inputBar.blur();
       this.search = false;
       if (this.inputVal != '') this.$root.$emit('get-query-data', '');
@@ -3574,10 +3615,18 @@ exports.default = {
     },
     onSearchClick: function onSearchClick() {
       this.search = true;
-      if (this.search) {
-        this.$refs.inputBar.focus();
-        console.log(this.$refs.inputBar.focus());
-      } else console.log("Swalla :");
+      this.isActive = true;
+      var myVar = setInterval(function () {
+        myTimer();
+      }, 100);
+      var self = this;
+      function myTimer() {
+        if (self.$refs.inputBar) {
+          console.log(" despacito is ", self.$refs.inputBar);
+          self.$refs.inputBar.focus();
+          clearInterval(myVar);
+        }
+      }
     },
     handleCrossClick: function handleCrossClick() {
       this.cross = false;
@@ -3668,12 +3717,19 @@ module.exports = {
     "position": "relative"
   },
   "detail-header-back": {
-    "position": "absolute",
-    "top": 30,
     "height": 40,
     "width": 40,
-    "left": 25,
     "color": "#ffffff"
+  },
+  "detail-header-back-container": {
+    "position": "absolute",
+    "top": 5,
+    "left": 5,
+    "paddingBottom": 30,
+    "paddingLeft": 30,
+    "paddingRight": 30,
+    "paddingTop": 30,
+    "backgroundColor:active": "#1566b6"
   },
   "detail-title": {
     "fontSize": 45,
@@ -3815,14 +3871,17 @@ module.exports = {
   },
   "search-icon": {
     "height": 40,
-    "width": 40,
+    "width": 40
+  },
+  "search-container": {
     "position": "absolute",
     "right": 40,
-    "marginRight": 30,
-    "marginLeft": 30,
-    "marginTop": 30,
-    "marginBottom": 30,
-    "top": 2
+    "top": 0,
+    "paddingRight": 30,
+    "paddingLeft": 30,
+    "paddingTop": 35,
+    "paddingBottom": 35,
+    "backgroundColor:active": "#1566b6"
   },
   "app-header-title": {
     "position": "absolute",
@@ -3851,28 +3910,34 @@ module.exports = {
     "height": 110
   },
   "search-back": {
+    "height": 40,
+    "width": 40,
+    "zIndex": 1000
+  },
+  "search-back-container": {
     "position": "absolute",
     "top": 6,
     "left": 5,
-    "height": 40,
-    "width": 40,
-    "zIndex": 1000,
-    "marginRight": 30,
-    "marginLeft": 30,
-    "marginTop": 30,
-    "marginBottom": 30
+    "paddingRight": 30,
+    "paddingLeft": 30,
+    "paddingTop": 30,
+    "paddingBottom": 30,
+    "backgroundColor:active": "#cfcfcf"
   },
   "search-cross": {
-    "position": "absolute",
-    "top": 10,
-    "right": 40,
     "height": 30,
     "width": 30,
-    "zIndex": 1000,
-    "marginRight": 30,
-    "marginLeft": 30,
-    "marginTop": 30,
-    "marginBottom": 30
+    "zIndex": 1000
+  },
+  "search-cross-container": {
+    "position": "absolute",
+    "top": 6,
+    "right": 5,
+    "paddingRight": 30,
+    "paddingLeft": 30,
+    "paddingTop": 30,
+    "paddingBottom": 30,
+    "backgroundColor:active": "#cfcfcf"
   }
 }
 
@@ -3899,15 +3964,17 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: ["detailView"]
   }, [_c('div', {
     staticClass: ["detail-header"]
+  }, [_c('div', {
+    staticClass: ["detail-header-back-container"],
+    on: {
+      "click": _vm.handleRoute
+    }
   }, [_c('image', {
     staticClass: ["detail-header-back"],
     attrs: {
       "src": "https://uploader-assets.s3.ap-south-1.amazonaws.com/back-icon.png"
-    },
-    on: {
-      "click": _vm.handleRoute
     }
-  }), _c('text', {
+  })]), _c('text', {
     staticClass: ["detail-title"]
   }, [_vm._v(_vm._s(_vm.current.title))])]), _c('scroller', [_c('div', {
     staticClass: ["map"]
@@ -3975,10 +4042,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: ["list-view"]
   }, [_c('list', {
     staticClass: ["main-list"],
-    appendAsTree: true,
     attrs: {
-      "loadmoreoffset": "50",
-      "append": "tree"
+      "loadmoreoffset": "50"
     },
     on: {
       "loadmore": _vm.loadMoreData
@@ -3995,7 +4060,11 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         }
       }
     }, [_c('div', {
-      staticClass: ["list"]
+      staticClass: ["list"],
+      appendAsTree: true,
+      attrs: {
+        "append": "tree"
+      }
     }, [_c('div', {
       staticClass: ["list-info"],
       attrs: {
@@ -4054,15 +4123,17 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "id": "searchBar"
     }
+  }, [_c('div', {
+    staticClass: ["search-container"],
+    on: {
+      "click": _vm.onSearchClick
+    }
   }, [_c('image', {
     staticClass: ["search-icon"],
     attrs: {
       "src": "http://www.clker.com/cliparts/n/U/H/1/H/u/search-icon-white-one-md.png"
-    },
-    on: {
-      "click": _vm.onSearchClick
     }
-  }), _c('text', {
+  })]), _c('text', {
     staticClass: ["app-header-title"]
   }, [_vm._v("Walkins Nearby")])]), (_vm.search) ? _c('input', {
     ref: "inputBar",
@@ -4078,23 +4149,27 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.inputVal = $event.target.attr.value
       }, _vm.handleInput]
     }
-  }) : _vm._e(), (_vm.search) ? _c('image', {
-    staticClass: ["search-back"],
-    attrs: {
-      "src": "https://uploader-assets.s3.ap-south-1.amazonaws.com/black-icon.png"
-    },
+  }) : _vm._e(), (_vm.search) ? _c('div', {
+    staticClass: ["search-back-container"],
     on: {
       "click": _vm.hideSearch
     }
-  }) : _vm._e(), (_vm.search && _vm.cross) ? _c('image', {
-    staticClass: ["search-cross"],
+  }, [_c('image', {
+    staticClass: ["search-back"],
     attrs: {
-      "src": "https://image.flaticon.com/icons/png/128/59/59836.png"
-    },
+      "src": "https://uploader-assets.s3.ap-south-1.amazonaws.com/black-icon.png"
+    }
+  })]) : _vm._e(), (_vm.search && _vm.cross) ? _c('div', {
+    staticClass: ["search-cross-container"],
     on: {
       "click": _vm.handleCrossClick
     }
-  }) : _vm._e()]), _c('div', {
+  }, [_c('image', {
+    staticClass: ["search-cross"],
+    attrs: {
+      "src": "https://image.flaticon.com/icons/png/128/59/59836.png"
+    }
+  })]) : _vm._e()]), _c('div', {
     staticClass: ["scroller"]
   }, [_c('router-view', {
     staticStyle: {

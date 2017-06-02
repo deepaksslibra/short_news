@@ -1,7 +1,9 @@
 <template>
   <div class="detailView"> 
     <div class="detail-header">
-      <image @click="handleRoute" class="detail-header-back" src="https://uploader-assets.s3.ap-south-1.amazonaws.com/back-icon.png"></image>
+      <div class="detail-header-back-container" @click="handleRoute">
+        <image class="detail-header-back" src="https://uploader-assets.s3.ap-south-1.amazonaws.com/back-icon.png"></image>
+      </div>
       <text class="detail-title">{{current.title}}</text>
     </div>
     <scroller>
@@ -60,12 +62,23 @@
   }
 
   .detail-header-back{
-    position: absolute;
-    top: 30px;
     height: 40px;
     width: 40px;
-    left: 25px;
     color: #fff;
+  }
+
+  .detail-header-back-container { 
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    padding-bottom: 30px;
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-top: 30px;
+  }
+
+  .detail-header-back-container:active {
+    background-color: #1566b6;
   }
 
   .detail-title{
@@ -136,17 +149,14 @@
         param : this.$route.params.jobId,
         maplat : '',
         maplong : '',
-        url : ''
+        url : '',
+        mapurl : ''
       }
     },
     computed : {
       current : function() { 
       return this.$root.$data.temp[this.param];
       },
-      mapurl : function() {
-        
-       return "https://maps.googleapis.com/maps/api/staticmap?center="+this.maplat+","+this.maplong+"&zoom=15&size=750x400&maptype=roadmap&key=AIzaSyBMAtpMuPIgiMTnAdlh22w9ITb_BpkrlNc";
-      }
     },
     methods : {
       getlatlong : function() {
@@ -158,6 +168,7 @@
         },function(res){
           self.maplat = res.data.results[0].geometry.location.lat;
           self.maplong = res.data.results[0].geometry.location.lng;
+          self.mapurl = "http://maps.googleapis.com/maps/api/staticmap?center="+self.maplat+","+self.maplong+"&zoom=15&size=750x400&maptype=roadmap&key=AIzaSyBMAtpMuPIgiMTnAdlh22w9ITb_BpkrlNc";
         })
       },
       handleRoute : function() {

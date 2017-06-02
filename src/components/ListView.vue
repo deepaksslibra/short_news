@@ -1,8 +1,8 @@
 <template>
 	<div class="list-view">
-			<list class="main-list" @loadmore="loadMoreData" loadmoreoffset="50" append='tree'>
+			<list class="main-list" @loadmore="loadMoreData" loadmoreoffset="50">
 				<cell v-for="(item,index) in jobsList" v-on:click="takeroute(index)" append="tree">
-					<div class="list"> 
+					<div class="list" append="tree"> 
 						<div id="ls" class="list-info">
 							<text class="list-title list-data"><image class="list-title-image" src="https://cdn4.iconfinder.com/data/icons/dot/256/suitcase_travel.png"></image>{{item.title}}</text>
 							<text class="list-companyName list-data">{{item.companyName}}</text>

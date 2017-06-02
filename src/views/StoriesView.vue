@@ -2,12 +2,18 @@
   <div class="stories-view" append="tree">
     <div id="header" class="header">
         <div ref="searchBar" id="searchBar" class="search">
-            <image class="search-icon" src="http://www.clker.com/cliparts/n/U/H/1/H/u/search-icon-white-one-md.png" @click="onSearchClick"></image>
+            <div class="search-container" @click="onSearchClick">
+              <image class="search-icon" src="http://www.clker.com/cliparts/n/U/H/1/H/u/search-icon-white-one-md.png"></image>
+            </div>
             <text class="app-header-title">Walkins Nearby</text>
         </div>
         <input ref="inputBar" id="inputBar" @input="handleInput" v-model="inputVal" v-if="search" class="input" type="text" placeholder="search.."></input>
-        <image v-if="search" @click="hideSearch" class="search-back" src="https://uploader-assets.s3.ap-south-1.amazonaws.com/black-icon.png"></image>
-        <image @click="handleCrossClick" v-if="search && cross" class="search-cross" src="https://image.flaticon.com/icons/png/128/59/59836.png"></image>
+        <div v-if="search"  class="search-back-container" @click="hideSearch">
+          <image class="search-back" src="https://uploader-assets.s3.ap-south-1.amazonaws.com/black-icon.png"></image>
+        </div>
+        <div v-if="search && cross" class="search-cross-container" @click="handleCrossClick"> 
+          <image  class="search-cross" src="https://image.flaticon.com/icons/png/128/59/59836.png"></image>
+        </div>
     </div>
     <div class="scroller">
       <router-view style="flex:1"></router-view>
@@ -41,13 +47,20 @@
   .search-icon{
     height: 40px;
     width: 40px;
+  }
+
+  .search-container{
     position: absolute;
     right: 40px;
-    margin-right: 30px; 
-    margin-left: 30px;
-    margin-top: 30px;
-    margin-bottom: 30px;
-    top: 2px;
+    top: 0px;
+    padding-right: 30px;
+    padding-left: 30px;
+    padding-top: 35px;
+    padding-bottom: 35px;
+  }
+
+  .search-container:active{
+    background-color: #1566b6;
   }
 
   .app-header-title{
@@ -80,31 +93,46 @@
   }
 
   .search-back{
-    position: absolute;
-    top: 6px;
-    left: 5px;
     height: 40px;
     width: 40px;
     z-index: 1000;
-    margin-right: 30px; 
-    margin-left: 30px;
-    margin-top: 30px;
-    margin-bottom: 30px;
+  }
+
+  .search-back-container{
+    position: absolute;
+    top: 6px;
+    left: 5px;
+    padding-right: 30px;
+    padding-left: 30px;
+    padding-top: 30px;
+    padding-bottom: 30px;
+  }
+
+  .search-back-container:active{
+    background-color: #cfcfcf;
   }
 
   .search-cross{
-    position: absolute;
-    top: 10px;
-    right: 40px;
     height: 30px;
     width: 30px;
-    z-index: 1000;
-    margin-right: 30px; 
-    margin-left: 30px;
-    margin-top: 30px;
-    margin-bottom: 30px;    
+    z-index: 1000; 
+  }
+
+  .search-cross-container {
+    position: absolute;
+    top : 6px;
+    right: 5px;
+    padding-right: 30px;
+    padding-left: 30px;
+    padding-top: 30px;
+    padding-bottom: 30px; 
+  }
+
+  .search-cross-container:active{
+    background-color: #cfcfcf;
   }
   
+
 </style>
 
 
@@ -116,7 +144,8 @@
         cross : false,
         isCrossClicked : false,
         inputVal : "",
-        timeout : null
+        timeout : null,
+        isActive : false,
       }
     },
     methods : {
@@ -149,6 +178,7 @@
       },
       onSearchClick : function() {
         this.search = true;
+        this.isActive = true;
         var myVar = setInterval(function(){ myTimer() }, 100);
         var self = this;
         function myTimer() {
