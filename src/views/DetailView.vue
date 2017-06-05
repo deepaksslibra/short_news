@@ -69,12 +69,13 @@
 
   .detail-header-back-container { 
     position: absolute;
-    top: 5px;
+    top: 15px;
     left: 5px;
-    padding-bottom: 30px;
-    padding-left: 30px;
-    padding-right: 30px;
-    padding-top: 30px;
+    padding-bottom: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 20px;
+    border-radius: 40px;
   }
 
   .detail-header-back-container:active {
@@ -121,6 +122,10 @@
     background-color: #1976D2;
     margin-left: 250px;
     margin-right: 250px;
+  }
+
+  .detail-apply:active {
+    background-color: #1566b6;
   }
 
   .detail-apply-text{

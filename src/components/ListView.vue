@@ -10,7 +10,9 @@
 							<text v-else class="list-phone list-data">N/A</text>
 						</div>
 						<text class="list-distance">{{Math.round(item.distance).toFixed(1)}} kms</text>
-						<text class="list-apply" v-on:click="doNothing(index)">Apply</text>
+						<a class="list-apply" :href="item.source">
+						<text style="color:#FFFFFF;">Apply</text>
+						</a>
 					</div>
 				</cell>
 			</list>
@@ -130,6 +132,9 @@
 		padding-bottom: 15px;
 		background-color: #1976D2;
 		color: #ffffff;
+	}
+	.list-apply:active{
+		background-color: #1566b6;
 	}
 	.loading {
 	    justify-content: center;

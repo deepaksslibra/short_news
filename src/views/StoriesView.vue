@@ -52,11 +52,12 @@
   .search-container{
     position: absolute;
     right: 40px;
-    top: 0px;
-    padding-right: 30px;
-    padding-left: 30px;
-    padding-top: 35px;
-    padding-bottom: 35px;
+    top: 10px;
+    padding-right: 20px;
+    padding-left: 20px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    border-radius: 40px;
   }
 
   .search-container:active{
@@ -100,12 +101,13 @@
 
   .search-back-container{
     position: absolute;
-    top: 6px;
+    top: 15px;
     left: 5px;
-    padding-right: 30px;
-    padding-left: 30px;
-    padding-top: 30px;
-    padding-bottom: 30px;
+    padding-right: 20px;
+    padding-left: 20px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    border-radius: 40px;
   }
 
   .search-back-container:active{
@@ -120,12 +122,13 @@
 
   .search-cross-container {
     position: absolute;
-    top : 6px;
-    right: 5px;
-    padding-right: 30px;
-    padding-left: 30px;
-    padding-top: 30px;
-    padding-bottom: 30px; 
+    top :  20px;
+    right: 15px;
+    padding-right: 20px;
+    padding-left: 20px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    border-radius: 40px; 
   }
 
   .search-cross-container:active{

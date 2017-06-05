@@ -3167,6 +3167,8 @@ Object.defineProperty(exports, "__esModule", {
 //
 //
 //
+//
+//
 
 exports.default = {
 	data: function data() {
@@ -3231,6 +3233,11 @@ Object.defineProperty(exports, "__esModule", {
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+//
+//
+//
+//
+//
 //
 //
 //
@@ -3579,6 +3586,9 @@ Object.defineProperty(exports, "__esModule", {
 //
 //
 //
+//
+//
+//
 
 exports.default = {
   data: function data() {
@@ -3723,12 +3733,13 @@ module.exports = {
   },
   "detail-header-back-container": {
     "position": "absolute",
-    "top": 5,
+    "top": 15,
     "left": 5,
-    "paddingBottom": 30,
-    "paddingLeft": 30,
-    "paddingRight": 30,
-    "paddingTop": 30,
+    "paddingBottom": 20,
+    "paddingLeft": 20,
+    "paddingRight": 20,
+    "paddingTop": 20,
+    "borderRadius": 40,
     "backgroundColor:active": "#1566b6"
   },
   "detail-title": {
@@ -3766,7 +3777,8 @@ module.exports = {
     "border": "none",
     "backgroundColor": "#1976D2",
     "marginLeft": 250,
-    "marginRight": 250
+    "marginRight": 250,
+    "backgroundColor:active": "#1566b6"
   },
   "detail-apply-text": {
     "fontSize": 30,
@@ -3833,7 +3845,8 @@ module.exports = {
     "paddingTop": 15,
     "paddingBottom": 15,
     "backgroundColor": "#1976D2",
-    "color": "#ffffff"
+    "color": "#ffffff",
+    "backgroundColor:active": "#1566b6"
   },
   "indicator": {
     "marginLeft": 335,
@@ -3876,11 +3889,12 @@ module.exports = {
   "search-container": {
     "position": "absolute",
     "right": 40,
-    "top": 0,
-    "paddingRight": 30,
-    "paddingLeft": 30,
-    "paddingTop": 35,
-    "paddingBottom": 35,
+    "top": 10,
+    "paddingRight": 20,
+    "paddingLeft": 20,
+    "paddingTop": 20,
+    "paddingBottom": 20,
+    "borderRadius": 40,
     "backgroundColor:active": "#1566b6"
   },
   "app-header-title": {
@@ -3916,12 +3930,13 @@ module.exports = {
   },
   "search-back-container": {
     "position": "absolute",
-    "top": 6,
+    "top": 15,
     "left": 5,
-    "paddingRight": 30,
-    "paddingLeft": 30,
-    "paddingTop": 30,
-    "paddingBottom": 30,
+    "paddingRight": 20,
+    "paddingLeft": 20,
+    "paddingTop": 20,
+    "paddingBottom": 20,
+    "borderRadius": 40,
     "backgroundColor:active": "#cfcfcf"
   },
   "search-cross": {
@@ -3931,12 +3946,13 @@ module.exports = {
   },
   "search-cross-container": {
     "position": "absolute",
-    "top": 6,
-    "right": 5,
-    "paddingRight": 30,
-    "paddingLeft": 30,
-    "paddingTop": 30,
-    "paddingBottom": 30,
+    "top": 20,
+    "right": 15,
+    "paddingRight": 20,
+    "paddingLeft": 20,
+    "paddingTop": 20,
+    "paddingBottom": 20,
+    "borderRadius": 40,
     "backgroundColor:active": "#cfcfcf"
   }
 }
@@ -4085,14 +4101,16 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       staticClass: ["list-phone", "list-data"]
     }, [_vm._v("N/A")])]), _c('text', {
       staticClass: ["list-distance"]
-    }, [_vm._v(_vm._s(Math.round(item.distance).toFixed(1)) + " kms")]), _c('text', {
+    }, [_vm._v(_vm._s(Math.round(item.distance).toFixed(1)) + " kms")]), _c('a', {
       staticClass: ["list-apply"],
-      on: {
-        "click": function($event) {
-          _vm.doNothing(index)
-        }
+      attrs: {
+        "href": item.source
       }
-    }, [_vm._v("Apply")])])])
+    }, [_c('text', {
+      staticStyle: {
+        color: "#FFFFFF"
+      }
+    }, [_vm._v("Apply")])])], 1)])
   })), (_vm.loading) ? _c('div', {
     staticClass: ["loading"]
   }, [_c('text', {
